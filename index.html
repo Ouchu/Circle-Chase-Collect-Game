@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3489418943335991"
+     crossorigin="anonymous"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Chase & Collect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Circle Chase!</h1>
+        <div id="game-info">
+            <p>Score: <span id="score">0</span></p>
+            <p>Lives: <span id="lives">3</span></p>
+            </div>
+        <canvas id="gameCanvas" width="360" height="640"></canvas>
+        <button id="startButton">Start Game</button>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="music/background_music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <audio id="startGameSound">
+        <source src="music/start_game.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="collectSound">
+        <source src="music/collect_item.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="gameOverSound">
+        <source src="music/game_over.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="levelUpSound">
+        <source src="music/level_up.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>

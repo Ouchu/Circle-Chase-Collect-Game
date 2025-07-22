@@ -1,0 +1,77 @@
+body {
+    margin: 0;
+    overflow: hidden; /* Hide scrollbars if canvas is large */
+    display: flex;
+    flex-direction: column; /* Arrange content vertically */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+    background-color: #282c34; /* Dark background */
+    color: #e0e0e0; /* Light text color */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.game-container {
+    position: relative; /* For positioning button */
+    text-align: center;
+    background-color: #3a3f47;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin: 20px; /* Add margin on all sides */
+    width: 90vw; /* Take 90% of viewport width */
+    max-width: 500px; /* Max width for larger screens so it doesn't get too big */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+h1 {
+    color: #61dafb; /* A nice light blue */
+    margin-bottom: 15px;
+}
+
+#game-info p {
+    font-size: 1.2em;
+    margin: 5px 0;
+}
+
+canvas {
+    border: 2px solid #61dafb;
+    background-color: #000000; /* Black canvas background */
+    display: block; /* Remove extra space below canvas */
+    margin: 15px auto;
+    width: 100%; /* Make canvas fill the container width */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 360px; /* Original fixed width constraint */
+    max-height: 640px; /* Original fixed height constraint */
+}
+
+/* Override canvas to use specific dimensions for consistency if needed */
+/* If you want the canvas itself to be bigger, you might need to change the
+   width/height attributes directly in index.html too, as CSS alone won't
+   change the internal drawing surface size. For now, this will make it
+   fit its container better. */
+
+button {
+    position: absolute; /* Position relative to .game-container */
+    top: 50%; /* Move to the vertical center */
+    left: 50%; /* Move to the horizontal center */
+    transform: translate(-50%, -50%); /* Adjust for button's own size to truly center */
+    z-index: 10; /* Ensure it's above the canvas */
+
+    background-color: #61dafb;
+    color: #282c34;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #21a1f1;
+}
+
+button:active {
+    background-color: #1a7bbd;
+}
