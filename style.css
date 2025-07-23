@@ -12,7 +12,7 @@ body {
 }
 
 .game-container {
-    position: relative; /* For positioning button relative to this container */
+    position: relative; /* For positioning button */
     text-align: center;
     background-color: #3a3f47;
     padding: 20px;
@@ -45,15 +45,25 @@ canvas {
     max-height: 640px; /* Original fixed height constraint */
 }
 
+/* Override canvas to use specific dimensions for consistency if needed */
+/* If you want the canvas itself to be bigger, you might need to change the
+   width/height attributes directly in index.html too, as CSS alone won't
+   change the internal drawing surface size. For now, this will make it
+   fit its container better. */
+
 button {
-    display: block; /* Makes the button take up its own line */
-    margin: 15px auto; /* Centers the button horizontally and gives space */
-    padding: 10px 20px;
+    position: absolute; /* Position relative to .game-container */
+    top: 50%; /* Move to the vertical center */
+    left: 50%; /* Move to the horizontal center */
+    transform: translate(-50%, -50%); /* Adjust for button's own size to truly center */
+    z-index: 10; /* Ensure it's above the canvas */
+
     background-color: #61dafb;
     color: #282c34;
     border: none;
-    border-radius: 5px;
+    padding: 10px 20px;
     font-size: 1.2em;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
