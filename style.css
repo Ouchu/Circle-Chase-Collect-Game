@@ -45,18 +45,7 @@ canvas {
     max-height: 640px; /* Original fixed height constraint */
 }
 
-/* Override canvas to use specific dimensions for consistency if needed */
-/* If you want the canvas itself to be bigger, you might need to change the
-   width/height attributes directly in index.html too, as CSS alone won't
-   change the internal drawing surface size. For now, this will make it
-   fit its container better. */
-
 button {
-    /* Removed: position: absolute; */
-    /* Removed: top: 50%; */
-    /* Removed: left: 50%; */
-    /* Removed: transform: translate(-50%, -50%); */
-    /* Removed: z-index: 10; */
     display: block; /* Makes the button take up its own line */
     margin: 15px auto; /* Centers the button horizontally and gives space */
     padding: 10px 20px;

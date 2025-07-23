@@ -4,24 +4,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('startButton');
     const scoreDisplay = document.getElementById('score');
     const livesDisplay = document.getElementById('lives');
-    const backgroundMusic = document.getElementById('backgroundMusic');
+    const currentLevelDisplay = document.getElementById('current-level'); // Ensure this is linked
 
-    // --- YOUR ACTUAL AdMob Constants (Rewarded Ad Unit ID removed) ---
+    // Audio Elements
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const startGameSound = document.getElementById('startGameSound');
+    const collectSound = document.getElementById('collectSound');
+    const gameOverSound = document.getElementById('gameOverSound');
+    const levelUpSound = document.getElementById('levelUpSound');
+
+    // --- YOUR ACTUAL AdMob Constants ---
     const APP_ID = 'ca-app-pub-3489418943335991~3495677200';
     const BANNER_AD_UNIT_ID = 'ca-app-pub-3489418943335991/6575290201';
     const INTERSTITIAL_AD_UNIT_ID = 'ca-app-pub-3489418943335991/9707013710';
-    // REWARDED_AD_UNIT_ID and rewardedAd variable are removed
 
     // --- AdMob Variables ---
     let interstitialAd = null;
-    // rewardedAd variable is removed
 
     // --- Game variables ---
     let score = 0;
     let lives = 3;
     let level = 1;
     let gameActive = false;
-    const SCORE_PER_LEVEL = 500;
+    const SCORE_PER_LEVEL = 100; // Level up every 100 score
 
     // Player (Green Circle)
     const player = {
@@ -101,12 +106,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 collectibles.splice(i, 1);
                 collectibles.push({ ...getRandomPosition(), radius: COLLECTIBLE_RADIUS, color: 'blue' });
 
+                // Play collect sound
+                collectSound.currentTime = 0; // Reset sound if it's currently playing
+                collectSound.play().catch(error => {
+                    console.error("Error playing collect sound:", error);
+                });
+
                 if (score > 0 && score % SCORE_PER_LEVEL === 0) {
                     level++;
-                    document.getElementById('current-level').textContent = level;
+                    currentLevelDisplay.textContent = level; // Use the correct display variable
                     enemy.speed += 0.5;
                     alert(`Level Up! You are now Level ${level}! Enemy speed increased!`);
                     console.log(`Level Up! Current Level: ${level}, Enemy Speed: ${enemy.speed}`);
+
+                    // Play level up sound
+                    levelUpSound.currentTime = 0; // Reset sound
+                    levelUpSound.play().catch(error => {
+                        console.error("Error playing level up sound:", error);
+                    });
                 }
             }
         }
@@ -126,14 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startGame() {
-        if (gameActive) return;
+        // Prevent multiple starts if already active
+        if (gameActive) return; 
 
         score = 0;
         lives = 3;
         level = 1;
         scoreDisplay.textContent = score;
         livesDisplay.textContent = lives;
-        document.getElementById('current-level').textContent = level;
+        currentLevelDisplay.textContent = level; // Use the correct display variable
         enemy.speed = 2;
 
         gameActive = true;
@@ -146,21 +164,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         initializeCollectibles();
 
+        // Play background music
         backgroundMusic.play().catch(error => {
-            console.error("Error playing music:", error);
+            console.error("Error playing background music:", error);
+        });
+        // Play start game sound
+        startGameSound.currentTime = 0; // Reset sound
+        startGameSound.play().catch(error => {
+            console.error("Error playing start game sound:", error);
         });
 
-        // Rewarded ad loading call is removed
         loadInterstitialAd(); // Pre-load interstitial ad
-        gameLoop();
+        gameLoop(); // Start the game loop
     }
 
     function endGame() {
         gameActive = false;
         backgroundMusic.pause();
-        backgroundMusic.currentTime = 0;
+        backgroundMusic.currentTime = 0; // Reset music for next play
         alert(`Game Over! Your score: ${score}`);
         startButton.style.display = 'block'; // Show start button again
+
+        // Play game over sound
+        gameOverSound.currentTime = 0; // Reset sound
+        gameOverSound.play().catch(error => {
+            console.error("Error playing game over sound:", error);
+        });
 
         showInterstitialAd(); // Show interstitial ad
     }
@@ -199,23 +228,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: false });
 
-    // Event listener for the start button
+    // Event listener for the start button - THIS IS WHAT TRIGGERS THE GAME
     startButton.addEventListener('click', startGame);
 
     // Initial drawing of the game state (before game starts)
     drawGame();
 
-    // --- AdMob Integration Functions (Rewarded Ad functions are removed) ---
+    // --- AdMob Integration Functions (if not using, these will just be present) ---
 
-    // Function to load and show a banner ad
     function loadBannerAd() {
         if (typeof adsbygoogle !== 'undefined' && adsbygoogle.length > 0) {
             let ins = document.createElement('ins');
             ins.className = 'adsbygoogle';
             ins.style.display = 'inline-block';
-            ins.style.width = '320px'; // Match your container width
-            ins.style.height = '50px'; // Match your container height
-            ins.setAttribute('data-ad-client', APP_ID); // Your App ID
+            ins.style.width = '320px';
+            ins.style.height = '50px';
+            ins.setAttribute('data-ad-client', APP_ID);
             ins.setAttribute('data-ad-slot', BANNER_AD_UNIT_ID);
 
             const bannerContainer = document.getElementById('banner-ad-container');
@@ -232,33 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Interstitial Ad Logic
-    function loadInterstitialAd() {
-        if (typeof googletag !== 'undefined' && googletag.cmd) {
-            googletag.cmd.push(function() {
-                if (!googletag.pubads().getSlots().find(s => s.getAdUnitPath() === '/' + APP_ID.split('~')[0] + '/' + INTERSTITIAL_AD_UNIT_ID.split('/')[1])) {
-                    interstitialAd = googletag.defineOutOfPageSlot(INTERSTITIAL_AD_UNIT_ID, googletag.enums.OutOfPageFormat.INTERSTITIAL);
-                    if (interstitialAd) {
-                        interstitialAd.addService(googletag.pubads());
-                        googletag.pubads().enableSingleRequest();
-                        googletag.enableServices();
-                        console.log("Interstitial ad defined.");
-                    } else {
-                        console.error("Failed to define interstitial ad slot.");
-                    }
-                } else {
-                    console.log("Interstitial ad slot already defined.");
-                .push({});
-                console.log("Banner ad requested.");
-            } else {
-                console.error("Banner ad container not found!");
-            }
-        } else {
-            console.log("AdMob SDK not loaded or ready for banner.");
-        }
-    }
-
-    // Interstitial Ad Logic
     function loadInterstitialAd() {
         if (typeof googletag !== 'undefined' && googletag.cmd) {
             googletag.cmd.push(function() {
@@ -299,4 +300,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial load for banner ad (can be shown always)
     loadBannerAd();
 });
-
