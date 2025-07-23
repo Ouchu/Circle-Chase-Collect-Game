@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         backgroundMusic.currentTime = 0;
         alert(`Game Over! Your score: ${score}`);
         startButton.style.display = 'block'; // Show start button again
-        // Rewarded ad button hide call is removed
 
         showInterstitialAd(); // Show interstitial ad
     }
@@ -249,6 +248,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } else {
                     console.log("Interstitial ad slot already defined.");
+                .push({});
+                console.log("Banner ad requested.");
+            } else {
+                console.error("Banner ad container not found!");
+            }
+        } else {
+            console.log("AdMob SDK not loaded or ready for banner.");
+        }
+    }
+
+    // Interstitial Ad Logic
+    function loadInterstitialAd() {
+        if (typeof googletag !== 'undefined' && googletag.cmd) {
+            googletag.cmd.push(function() {
+                if (!googletag.pubads().getSlots().find(s => s.getAdUnitPath() === '/' + APP_ID.split('~')[0] + '/' + INTERSTITIAL_AD_UNIT_ID.split('/')[1])) {
+                    interstitialAd = googletag.defineOutOfPageSlot(INTERSTITIAL_AD_UNIT_ID, googletag.enums.OutOfPageFormat.INTERSTITIAL);
+                    if (interstitialAd) {
+                        interstitialAd.addService(googletag.pubads());
+                        googletag.pubads().enableSingleRequest();
+                        googletag.enableServices();
+                        console.log("Interstitial ad defined.");
+                    } else {
+                        console.error("Failed to define interstitial ad slot.");
+                    }
+                } else {
+                    console.log("Interstitial ad slot already defined.");
                 }
             });
         } else {
@@ -271,8 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Rewarded Ad related code (watchAdButton, loadRewardedAd, showRewardedAd) is removed
-
     // Initial load for banner ad (can be shown always)
     loadBannerAd();
 });
+

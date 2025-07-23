@@ -3,8 +3,8 @@ body {
     overflow: hidden; /* Hide scrollbars if canvas is large */
     display: flex;
     flex-direction: column; /* Arrange content vertically */
-    justify-content: center; /* Centers content along the main axis */
-    align-items: center; /* Centers content along the cross axis */
+    justify-content: center;
+    align-items: center;
     min-height: 100vh; /* Full viewport height */
     background-color: #282c34; /* Dark background */
     color: #e0e0e0; /* Light text color */
@@ -12,8 +12,8 @@ body {
 }
 
 .game-container {
-    position: relative; /* Keep for general positioning context if needed elsewhere */
-    text-align: center; /* Center inline/inline-block children */
+    position: relative; /* For positioning button relative to this container */
+    text-align: center;
     background-color: #3a3f47;
     padding: 20px;
     border-radius: 10px;
@@ -37,29 +37,34 @@ h1 {
 canvas {
     border: 2px solid #61dafb;
     background-color: #000000; /* Black canvas background */
-    display: block; /* Ensure canvas is a block element */
-    margin: 15px auto; /* Center canvas horizontally and add vertical margin */
+    display: block; /* Remove extra space below canvas */
+    margin: 15px auto;
     width: 100%; /* Make canvas fill the container width */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 360px; /* Original fixed width constraint */
+    max-height: 640px; /* Original fixed height constraint */
 }
 
-/* --- CRITICAL FIX: CORRECTED BUTTON STYLING --- */
+/* Override canvas to use specific dimensions for consistency if needed */
+/* If you want the canvas itself to be bigger, you might need to change the
+   width/height attributes directly in index.html too, as CSS alone won't
+   change the internal drawing surface size. For now, this will make it
+   fit its container better. */
+
 button {
-    /* These properties are REMOVED from previous versions:
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    */
-    
-    display: block; /* Make buttons take up full width and stack vertically */
-    margin: 15px auto; /* Center horizontally, add vertical spacing */
+    /* Removed: position: absolute; */
+    /* Removed: top: 50%; */
+    /* Removed: left: 50%; */
+    /* Removed: transform: translate(-50%, -50%); */
+    /* Removed: z-index: 10; */
+    display: block; /* Makes the button take up its own line */
+    margin: 15px auto; /* Centers the button horizontally and gives space */
     padding: 10px 20px;
-    font-size: 1.2em;
-    background-color: #61dafb; /* Default button color (overridden for watchAdButton in script.js) */
+    background-color: #61dafb;
     color: #282c34;
     border: none;
     border-radius: 5px;
+    font-size: 1.2em;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -69,5 +74,5 @@ button:hover {
 }
 
 button:active {
-    background-color: #1a7bod;
+    background-color: #1a7bbd;
 }
